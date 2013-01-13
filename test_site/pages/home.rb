@@ -1,6 +1,6 @@
 class TestHomePage < SitePrism::Page
   set_url "/home.htm"
-  set_url_matcher /home\.htm$/
+  set_url_matcher(/home\.htm$/)
 
   #individual elements
   element :welcome_header, 'h1'
@@ -21,6 +21,12 @@ class TestHomePage < SitePrism::Page
 
   #sections
   section :people, People, '.people'
+
+  #anonymous section 
+  element :anonymous_section_table, "p table" do |table|
+    table.element :first_row, 'td a'
+    table.element :header, "h1" # Should not be in context
+  end
 
   #iframes
   iframe :my_iframe, MyIframe, '#the_iframe'

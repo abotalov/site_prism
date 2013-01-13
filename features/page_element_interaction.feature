@@ -18,7 +18,9 @@ Feature: Page element interaction
 		And I can see the go button
 		And I can see the link to the search page
 		But I cannot see the missing squirrel
-		And I cannot see the missing other thingy
+    And I cannot see the missing other thingy
+    And Anonymous sections should find elements within context
+    But Anonymous sections should not find elements outside of context
 	
 	Scenario: Wait for element
 		When I navigate to the home page

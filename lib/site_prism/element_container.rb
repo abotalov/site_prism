@@ -3,7 +3,14 @@ module SitePrism::ElementContainer
   def element element_name, element_selector = nil
     build element_name, element_selector do
       define_method element_name.to_s do
-        find_one element_selector
+        if block_given?
+          anonymous_section = Class.new(SitePrism::Section) do |as|
+            yield as
+          end
+          anonymous_section.new find_one element_selector
+        else
+          find_one element_selector
+        end
       end
     end
   end
@@ -56,7 +63,7 @@ module SitePrism::ElementContainer
   end
 
   private
-  
+
   def build name, selector
     if selector.nil?
       create_no_selector name
@@ -66,14 +73,14 @@ module SitePrism::ElementContainer
     end
     add_checkers_and_waiters name, selector
   end
-  
+
   def add_checkers_and_waiters name, selector
     create_existence_checker name, selector
     create_waiter name, selector
     create_visibility_waiter name, selector
     create_invisibility_waiter name, selector
   end
-  
+
   def build_checker_or_waiter element_name, proposed_method_name, selector
     if selector.nil?
       create_no_selector element_name, proposed_method_name
