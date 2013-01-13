@@ -23,9 +23,9 @@ class TestHomePage < SitePrism::Page
   section :people, People, '.people'
 
   #anonymous section 
-  element :anonymous_section_table, "p table" do |table|
+  element :anonymous_section_table, 'p table' do |table|
     table.element :first_row, 'td a'
-    table.element :header, "h1" # Should not be in context
+    table.element :header, 'h1' # Should not be in context
   end
 
   #iframes
