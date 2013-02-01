@@ -18,7 +18,16 @@ module SitePrism::ElementContainer
   def elements collection_name, collection_selector = nil
     build collection_name, collection_selector do
       define_method collection_name.to_s do
-        find_all collection_selector
+        if block_given?
+          anonymous_section = Class.new(SitePrism::Section) do |as|
+            yield as
+          end
+          find_all(collection_selector).collect do |element|
+            anonymous_section.new element, self
+          end
+        else
+          find_all collection_selector
+        end
       end
     end
   end
