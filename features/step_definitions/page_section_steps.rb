@@ -45,3 +45,20 @@ Then /^I can see individual people in the people list$/ do
   @test_site.home.people.should have(4).individuals
 end
 
+Then /^Anonymous sections should find elements within context$/ do
+  @test_site.home.anonymous_section_table.should have_first_row
+end
+
+Then /^Anonymous sections should not find elements outside of context$/ do
+  @test_site.home.anonymous_section_table.should_not have_header
+end
+
+Then /^Anonymous sections are recursive$/ do
+  @test_site.section_experiments.anonymous_parent_section.anonymous_child_section.should have_nice_label
+end
+
+Then /^Anonymous sections can be defined for collections of elements$/ do
+  @test_site.section_experiments.anonymous_search_results.all? do |result|
+    result.should have_title
+  end
+end

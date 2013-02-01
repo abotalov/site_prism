@@ -94,10 +94,3 @@ Then /^I get a timeout error when I wait for an element that never disappears$/ 
   expect {@test_site.home.wait_until_welcome_header_invisible(1)}.to raise_error SitePrism::TimeOutWaitingForElementInvisibility
 end
 
-Then /^Anonymous sections should find elements within context$/ do
-  @test_site.home.anonymous_section_table.should have_first_row
-end
-
-Then /^Anonymous sections should not find elements outside of context$/ do
-  @test_site.home.anonymous_section_table.should_not have_header
-end

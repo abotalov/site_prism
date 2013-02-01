@@ -7,4 +7,4 @@ gem "yard"
 gem "redcarpet"
 gem "simplecov"
 gem "reek"
-
+gem "pry"

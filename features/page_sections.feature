@@ -38,3 +38,8 @@ Feature: Page Sections
 		Then when I wait for the section element that takes a while to appear
 		Then I successfully wait for the slow section element to appear
 
+  Scenario: Anonymous sections
+    When I navigate to the section experiments page
+    Then Anonymous sections are recursive
+    And Anonymous sections can be defined for collections of elements
+

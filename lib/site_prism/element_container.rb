@@ -7,7 +7,7 @@ module SitePrism::ElementContainer
           anonymous_section = Class.new(SitePrism::Section) do |as|
             yield as
           end
-          anonymous_section.new find_one element_selector
+          anonymous_section.new find_first element_selector
         else
           find_first element_selector
         end
@@ -23,7 +23,7 @@ module SitePrism::ElementContainer
             yield as
           end
           find_all(collection_selector).collect do |element|
-            anonymous_section.new element, self
+            anonymous_section.new element
           end
         else
           find_all collection_selector

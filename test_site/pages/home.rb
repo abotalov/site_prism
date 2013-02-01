@@ -24,7 +24,10 @@ class TestHomePage < SitePrism::Page
 
   #anonymous section 
   element :anonymous_section_table, 'p table' do |table|
-    table.element :first_row, 'td a'
+    table.element :first_row, 'tr'
+    table.element :first_cell, 'td' do |td|
+      td.element :link, 'a'
+    end
     table.element :header, 'h1' # Should not be in context
   end
 
