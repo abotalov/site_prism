@@ -49,8 +49,8 @@ module SitePrism
 
     private
 
-    def find_one selector
-      find selector
+    def find_first selector
+      first selector
     end
 
     def find_all selector
@@ -59,10 +59,6 @@ module SitePrism
 
     def element_exists? selector
       has_selector? selector
-    end
-
-    def element_waiter selector
-      wait_until { element_exists? selector }
     end
   end
 end

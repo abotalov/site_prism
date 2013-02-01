@@ -24,8 +24,8 @@ module SitePrism
 
     private
 
-    def find_one selector
-      root_element.find selector
+    def find_first selector
+      root_element.first selector
     end
 
     def find_all selector
@@ -34,10 +34,6 @@ module SitePrism
 
     def element_exists? selector
       root_element.has_selector? selector
-    end
-
-    def element_waiter selector
-      Capybara.current_session.wait_until { element_exists? selector }
     end
   end
 end

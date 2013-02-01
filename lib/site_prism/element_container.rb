@@ -9,7 +9,7 @@ module SitePrism::ElementContainer
           end
           anonymous_section.new find_one element_selector
         else
-          find_one element_selector
+          find_first element_selector
         end
       end
     end
@@ -36,7 +36,7 @@ module SitePrism::ElementContainer
   def section section_name, section_class, section_selector
     build section_name, section_selector do
       define_method section_name do
-        section_class.new find_one section_selector
+        section_class.new find_first section_selector
       end
     end
   end
@@ -112,10 +112,9 @@ module SitePrism::ElementContainer
   def create_waiter element_name, element_selector
     method_name = "wait_for_#{element_name.to_s}"
     build_checker_or_waiter element_name, method_name, element_selector do
-      define_method method_name do |*args| #used to use block args, but they don't work under ruby 1.8 :(
-        timeout = args.shift || Capybara.default_wait_time
+      define_method method_name do |timeout = Capybara.default_wait_time|
         Capybara.using_wait_time timeout do
-          element_waiter element_selector
+          element_exists? element_selector
         end
       end
     end
@@ -124,17 +123,12 @@ module SitePrism::ElementContainer
   def create_visibility_waiter element_name, element_selector
     method_name = "wait_until_#{element_name.to_s}_visible"
     build_checker_or_waiter element_name, method_name, element_selector do
-      define_method method_name do |*args|
-        timeout = args.shift || Capybara.default_wait_time
+      define_method method_name do |timeout = Capybara.default_wait_time|
         Capybara.using_wait_time timeout do
-          element_waiter element_selector
+          element_exists? element_selector
         end
-        begin
-          Timeout.timeout(timeout) do
-            sleep 0.1 until find_one(element_selector).visible?
-          end
-        rescue Timeout::Error
-          raise SitePrism::TimeOutWaitingForElementVisibility.new("#{element_name} did not become visible")
+        Timeout.timeout timeout, SitePrism::TimeOutWaitingForElementVisibility do
+          sleep 0.1 until find_first(element_selector).visible?
         end
       end
     end
@@ -143,14 +137,9 @@ module SitePrism::ElementContainer
   def create_invisibility_waiter element_name, element_selector
     method_name = "wait_until_#{element_name.to_s}_invisible"
     build_checker_or_waiter element_name, method_name, element_selector do
-      define_method method_name do |*args|
-        timeout = args.shift || Capybara.default_wait_time
-        begin
-          Timeout.timeout(timeout) do
-            sleep 0.1 while element_exists?(element_selector) && find_one(element_selector).visible?
-          end
-        rescue Timeout::Error
-          raise SitePrism::TimeOutWaitingForElementInvisibility.new("#{element_name} did not become invisible")
+      define_method method_name do |timeout = Capybara.default_wait_time|
+        Timeout.timeout timeout, SitePrism::TimeOutWaitingForElementInvisibility do
+          sleep 0.1 while element_exists?(element_selector) && find_first(element_selector).visible?
         end
       end
     end
