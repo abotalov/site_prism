@@ -62,3 +62,4 @@ Then /^Anonymous sections can be defined for collections of elements$/ do
     result.should have_title
   end
 end
+

@@ -1,6 +1,6 @@
 class TestHomePage < SitePrism::Page
   set_url "/home.htm"
-  set_url_matcher(/home\.htm$/)
+  set_url_matcher /home\.htm$/
 
   #individual elements
   element :welcome_header, :xpath, '//h1'
@@ -22,7 +22,7 @@ class TestHomePage < SitePrism::Page
   #sections
   section :people, People, '.people'
 
-  #anonymous section 
+  #anonymous section
   element :anonymous_section_table, 'p table' do |table|
     table.element :first_row, 'tr'
     table.element :first_cell, 'td' do |td|
