@@ -3,7 +3,14 @@ module SitePrism::ElementContainer
   def element element_name, *find_args 
     build element_name, *find_args do
       define_method element_name.to_s do
-        find_first *find_args
+        if block_given?
+          anonymous_section = Class.new(SitePrism::Section) do |as|
+            yield as
+          end
+          anonymous_section.new find_first *find_args
+        else
+          find_first *find_args
+        end
       end
     end
   end
@@ -11,7 +18,16 @@ module SitePrism::ElementContainer
   def elements collection_name, *find_args
     build collection_name, *find_args do
       define_method collection_name.to_s do
-        find_all *find_args
+        if block_given?
+          anonymous_section = Class.new(SitePrism::Section) do |as|
+            yield as
+          end
+          find_all(*find_args).collect do |element|
+            anonymous_section.new element
+          end
+        else
+          find_all *find_args
+        end
       end
     end
   end
@@ -56,7 +72,7 @@ module SitePrism::ElementContainer
   end
 
   private
-  
+
   def build name, *find_args
     if find_args.empty?
       create_no_selector name

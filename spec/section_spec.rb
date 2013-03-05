@@ -28,6 +28,7 @@ describe SitePrism::Page do
     page = YetAnotherPageWithASection.new
     page.should respond_to :has_something?
   end
+
 end
 
 describe SitePrism::Section do
